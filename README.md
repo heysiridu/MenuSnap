@@ -424,11 +424,6 @@ kill -9 <PID>  # Kill process
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team
-
-- **Your Name** - Full Stack Developer - [GitHub](https://github.com/yourusername)
-- **Team Member 2** - Frontend Developer
-- **Team Member 3** - Backend Developer
 
 ## 🙏 Acknowledgments
 
