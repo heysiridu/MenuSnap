@@ -421,10 +421,6 @@ lsof -i :8000  # Find process
 kill -9 <PID>  # Kill process
 ```
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 
 ## 🙏 Acknowledgments
 
