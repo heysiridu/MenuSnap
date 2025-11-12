@@ -18,8 +18,8 @@
 ## 📸 Demo
 
 <div align="center">
-  <img src="docs/demo.gif" alt="MenuSnap Demo" width="600" />
   <p><i>Upload a menu photo and watch it transform into an interactive digital menu</i></p>
+  <img width="3953" height="2342" alt="Image" src="https://github.com/user-attachments/assets/76d5ccab-8202-4d4b-9f60-bfd414544b41" />
 </div>
 
 ## ✨ Features
