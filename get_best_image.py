@@ -6,8 +6,8 @@ import webbrowser
 from typing import List, Dict, Optional
 
 # ============ configuration ============
-GOOGLE_KEY = "AIzaSyBWjfsllZt7x3jwMaAu_P6VDUi9_e_URqM"
-GOOGLE_CX  = "233a894886fd54a8a"
+GOOGLE_KEY = ""
+GOOGLE_CX  = ""
 
 CANDIDATES_PER_DISH = 8
 ALLOWED_MIME_PREFIX = ("image/",)
