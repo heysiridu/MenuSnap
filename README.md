@@ -26,3 +26,11 @@ pip install "paddleocr[all]"
 ```bash
 pip install flask
 ```
+
+## 🔧使用
+* 修改app.py中的图片路径文件夹
+* 修改test_client.py中的图片
+```bash
+python app.py
+python test_client.py
+```
