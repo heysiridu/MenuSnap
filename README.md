@@ -11,3 +11,18 @@
 * **模型单例模式:** OCR 服务在启动时以单例模式加载。这确保模型和依赖（如 `ocr/paddle_service.py` 所示）只在内存中初始化一次，极大地提高了后续 API 请求的响应速度。
 * **安全可控:** 从服务器本地文件夹读取文件，避免了处理文件上传的安全风险和复杂性，同时通过安全检查防止了路径遍历攻击。
 
+## ⏬ 配置
+安装 PaddlePaddle (CPU 版本):
+```bash
+pip install paddlepaddle==2.6.0 -i [https://mirror.baidu.com/pypi/simple](https://mirror.baidu.com/pypi/simple)
+```
+
+安装 PaddleOCR:
+```bash
+pip install "paddleocr[all]"
+```
+
+安装 Flask:
+```bash
+pip install flask
+```
