@@ -4,7 +4,7 @@ import json
 # API 服务器的地址
 url = 'http://127.0.0.1:5001/predict'
 
-filename_on_server = '2.png'
+filename_on_server = 'menu6.png'
 
 # 准备要发送的 JSON 数据
 payload = {
