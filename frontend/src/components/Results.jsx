@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Image as ImageIcon,
   ArrowLeft,
@@ -6,12 +6,17 @@ import {
   Ellipsis,
   Loader2,
   X,
+  Globe, // 新增：图标
 } from "lucide-react";
 
-const MenuItemCard = ({ item }) => {
+const MenuItemCard = ({ item, currentLang }) => {
   const [imageError, setImageError] = React.useState(false);
   const [imageLoaded, setImageLoaded] = React.useState(false);
   const [useThumbnail, setUseThumbnail] = React.useState(false);
+
+  // --- 逻辑：读取对应语言的菜名 ---
+  // 如果后端返回了 translations，读取对应语言，否则回退到原始 dish 名称
+  const displayName = item.translations?.[currentLang] || item.dish;
   
   const mainUrl = item.image?.url || item.image?.link || null;
   const thumbnailUrl = item.image?.thumbnailLink || null;
@@ -34,7 +39,7 @@ const MenuItemCard = ({ item }) => {
           <>
             <img
               src={currentImageUrl}
-              alt={item.dish}
+              alt={displayName}
               className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
               onLoad={() => setImageLoaded(true)}
               onError={handleImageError}
@@ -53,7 +58,7 @@ const MenuItemCard = ({ item }) => {
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-sm truncate">{item.dish}</h3>
+        <h3 className="font-semibold text-sm truncate">{displayName}</h3>
         {item.price && (
           <p className="text-xs text-black/60 mt-1">{item.price}</p>
         )}
@@ -64,7 +69,7 @@ const MenuItemCard = ({ item }) => {
             rel="noopener noreferrer"
             className="text-xs text-blue-600 hover:underline mt-2 inline-block"
           >
-            View full image
+            {currentLang === 'zh' ? '查看原图' : currentLang === 'es' ? 'Ver imagen' : 'View full image'}
           </a>
         )}
       </div>
@@ -90,11 +95,24 @@ export default function Results({
   onScanAnother, 
   onNewScan 
 }) {
+  // --- 状态：当前语言 (zh: 中文, en: 英文, es: 西班牙语) ---
+  const [currentLang, setCurrentLang] = useState("zh");
+
   if (!results) return null;
+
+  // 简单的 UI 文本翻译映射
+  const uiTexts = {
+    zh: { title: "菜单识别结果", found: "识别到", items: "项菜品", button: "扫描下一张", time: "识别耗时" },
+    en: { title: "Menu Results", found: "Found", items: "Menu Items", button: "Scan Another Menu", time: "OCR processing time" },
+    es: { title: "Resultados del Menú", found: "Encontrado", items: "Artículos", button: "Escanear otro", time: "Tiempo OCR" }
+  };
+
+  const t = uiTexts[currentLang];
   
   return (
     <div className="mx-auto max-w-sm px-4 pb-4 pt-1 text-black min-h-screen">
-      <div className="sticky top-0 z-10 -mx-4 mb-3 flex items-center justify-between bg-white/80 backdrop-blur-sm px-4 pt-3 pb-2">
+      {/* --- 修改：顶部导航栏添加下拉菜单 --- */}
+      <div className="sticky top-0 z-10 -mx-4 mb-3 flex items-center justify-between bg-white/80 backdrop-blur-sm px-4 pt-3 pb-2 border-b border-black/5">
         <button
           aria-label="Back"
           onClick={onScanAnother}
@@ -102,20 +120,27 @@ export default function Results({
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h2 className="text-base font-semibold">Menu Results</h2>
-        <button
-          aria-label="Close"
-          onClick={onScanAnother}
-          className="rounded-full p-2 hover:bg-black/[0.06]"
-        >
-          <X className="h-5 w-5" />
-        </button>
+        
+        <h2 className="text-sm font-semibold truncate px-2">{t.title}</h2>
+
+        <div className="relative flex items-center gap-1 bg-black/5 rounded-full px-2 py-1">
+          <Globe className="w-3 h-3 text-black/50" />
+          <select 
+            value={currentLang}
+            onChange={(e) => setCurrentLang(e.target.value)}
+            className="bg-transparent text-[10px] font-bold focus:outline-none appearance-none pr-1"
+          >
+            <option value="zh">中文</option>
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+          </select>
+        </div>
       </div>
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">
-            Found {results.dishes_found} Menu Items
+            {t.found} {results.dishes_found} {t.items}
           </h2>
         </div>
         
@@ -130,40 +155,31 @@ export default function Results({
         )}
 
         <p className="text-xs text-black/60">
-          OCR processing time: {results.ocr_time?.toFixed(2)}s
+          {t.time}: {results.ocr_time?.toFixed(2)}s
         </p>
 
         <div className="space-y-3">
           {results.menu_with_images?.map((item, index) => (
-            <MenuItemCard key={index} item={item} />
+            <MenuItemCard key={index} item={item} currentLang={currentLang} />
           ))}
         </div>
 
         <PillButton onClick={onScanAnother} className="w-full mt-4">
-          Scan Another Menu
+          {t.button}
         </PillButton>
       </div>
 
       <div className="sticky bottom-3 mt-6 flex w-full items-center justify-between gap-3">
-        <button
-          onClick={onScanAnother}
-          className="rounded-full p-3 shadow-sm border border-black/10 bg-white"
-        >
+        <button onClick={onScanAnother} className="rounded-full p-3 shadow-sm border border-black/10 bg-white">
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <button
-          onClick={onNewScan}
-          className="grid h-12 w-12 place-items-center rounded-full bg-black text-white shadow"
-        >
+        <button onClick={onNewScan} className="grid h-12 w-12 place-items-center rounded-full bg-black text-white shadow">
           <Plus className="h-6 w-6" />
         </button>
-        <button
-          className="rounded-full p-3 shadow-sm border border-black/10 bg-white"
-        >
+        <button className="rounded-full p-3 shadow-sm border border-black/10 bg-white">
           <Ellipsis className="h-5 w-5" />
         </button>
       </div>
     </div>
   );
 }
-

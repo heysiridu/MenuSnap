@@ -3,7 +3,8 @@ import MenuSnapHome from "./components/MenuSnapHome.jsx";
 import Processing from "./components/Processing.jsx";
 import Results from "./components/Results.jsx";
 
-const API_BASE_URL = "http://localhost:5001";
+// const API_BASE_URL = "http://localhost:5001";
+const API_BASE_URL = 'http://192.168.1.37:5001';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
